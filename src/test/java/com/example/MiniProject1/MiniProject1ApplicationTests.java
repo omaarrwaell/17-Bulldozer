@@ -31,7 +31,7 @@
 // import com.example.model.Product;
 // import com.example.model.User;
 // import com.example.repository.CartRepository;
-// import com.example.repository.OrderRepository;
+// import com.example.repository.OrderRepository.java;
 // import com.example.repository.ProductRepository;
 // import com.example.repository.UserRepository;
 // import com.example.service.CartService;
@@ -86,7 +86,7 @@
 // 	private ProductRepository productRepository;
 
 // 	@Autowired
-// 	private OrderRepository orderRepository;
+// 	private OrderRepository.java orderRepository;
 
 // 	public void overRideAll(){
 //         try{
