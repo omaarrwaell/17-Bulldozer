@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.model.Product;
 import com.example.model.User;
 import com.example.model.Order;
 import com.example.service.UserService;
@@ -69,20 +70,20 @@ public class UserController {
 
     @DeleteMapping("/{userId}/emptyCart")
     public String emptyCart(@PathVariable UUID userId) {
-        cartService.clearCart(userId);
+        userService.emptyCart(userId);
         return "Cart emptied successfully!";
     }
 
 
     @PutMapping("/addProductToCart")
-    public String addProductToCart(@RequestParam UUID userId, @RequestParam UUID productId) {
+    public String addProductToCart(@RequestParam UUID userId, @RequestParam Product productId) {
         cartService.addProductToCart(userId, productId);
         return "Product added to cart successfully!";
     }
 
 
     @PutMapping("/deleteProductFromCart")
-    public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam UUID productId) {
+    public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam Product productId) {
         cartService.deleteProductFromCart(userId, productId);
         return "Product removed from cart successfully!";
     }
