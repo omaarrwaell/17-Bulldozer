@@ -10,10 +10,11 @@ public class Product {
     private double price;
 
     public Product() {
+        this.id = UUID.randomUUID();
     }
 
-    public Product(UUID id, String name, double price) {
-        this.id = id;
+    public Product( String name, double price) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
     }
