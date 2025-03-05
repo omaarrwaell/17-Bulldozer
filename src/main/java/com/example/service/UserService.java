@@ -69,14 +69,30 @@ public class UserService extends MainService<User> {
 
 
     public void emptyCart(UUID userId) {
-
         Cart cart = cartService.getCartByUserId(userId);
-        if (cart != null) {
+
+        if (cart == null) {
+            System.out.println("Cart not found for user: " + userId);
+            return;
+        }
+        System.out.println("Before emptying: " + cart.getProducts());
+
+        if (cart.getProducts() == null) {
             cart.setProducts(new ArrayList<>());
-            cartRepository.overrideData(cartRepository.getCarts());
+            System.out.println("Cart");// Initialize if null
+        } else {
+            cart.getProducts().clear();  // Clear instead of replacing
         }
 
+        System.out.println("Cart products after emptying: " + cart.getProducts());
+        System.out.println("Cart products after ying: " + cartRepository.getCarts().get(0).getProducts().get(0).getName());
+
+        // Ensure the updated cart is saved back
+        cartRepository.updateCart(cart);
+//        System.out.println("Cart products after ng: " + cartRepository.getCarts().get(0).getProducts().get(0).getName());
+//        cartRepository.overrideData(cartRepository.getCarts()); // Ensure this writes the updated carts
     }
+
 
 
     public void removeOrderFromUser(UUID userId, UUID orderId) {
