@@ -54,7 +54,7 @@ public class UserController {
     public String addOrderToUser(@PathVariable UUID userId) {
         try {
             userService.addOrderToUser(userId);
-            return "Order placed successfully!";
+            return "Order added successfully";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -64,34 +64,37 @@ public class UserController {
     @PostMapping("/{userId}/removeOrder")
     public String removeOrderFromUser(@PathVariable UUID userId, @RequestParam UUID orderId) {
         userService.removeOrderFromUser(userId, orderId);
-        return "Order removed successfully!";
+        return "Order removed successfully";
     }
 
 
     @DeleteMapping("/{userId}/emptyCart")
     public String emptyCart(@PathVariable UUID userId) {
         userService.emptyCart(userId);
-        return "Cart emptied successfully!";
+        return "Cart emptied successfully";
     }
 
 
     @PutMapping("/addProductToCart")
     public String addProductToCart(@RequestParam UUID userId, @RequestParam Product productId) {
         cartService.addProductToCart(userId, productId);
-        return "Product added to cart successfully!";
+        return "Product added to cart successfully";
     }
 
 
     @PutMapping("/deleteProductFromCart")
     public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam Product productId) {
         cartService.deleteProductFromCart(userId, productId);
-        return "Product removed from cart successfully!";
+        return "Product removed from cart successfully";
     }
-
 
     @DeleteMapping("/delete/{userId}")
     public String deleteUserById(@PathVariable UUID userId) {
-        userService.deleteUserById(userId);
-        return "User deleted successfully!";
+        try {
+            userService.deleteUserById(userId);
+            return "User deleted successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();   //ana zawedt el try/catch -bassem
+        }
     }
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CartRepository extends MainRepository<Cart> {
 
-    private static final String FILE_PATH = "com/example/data/carts.json";
+    private static final String FILE_PATH = "src/main/java/com/example/data/carts.json";
 
     @Override
     protected String getDataPath() {
