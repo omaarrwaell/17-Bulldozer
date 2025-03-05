@@ -41,6 +41,9 @@ public class CartService extends MainService<Cart> {
     }
 
 
+    public void addProductToCart(UUID userId, UUID product) {
+        cartRepository.addProductToCart(userId, product);
+    }
     public void addProductToCart(UUID cartId, Product product) {
         cartRepository.addProductToCart(cartId, product);
     }
@@ -48,6 +51,9 @@ public class CartService extends MainService<Cart> {
 
     public void deleteProductFromCart(UUID cartId, Product product) {
         cartRepository.deleteProductFromCart(cartId, product);
+    }
+    public void deleteProductFromCart(UUID userId, UUID productId) {
+        cartRepository.deleteProductFromCart(userId, productId);
     }
 
 
