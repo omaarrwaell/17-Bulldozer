@@ -76,14 +76,14 @@ public class UserController {
     public String addProductToCart(@RequestParam UUID userId, @RequestParam UUID productId) {
         Product product = productService.getProductById(productId);
         cartService.addProductToCart(userId, product);
-        return "Product added to cart successfully";
+        return "Product added to cart";
     }
 
     @PutMapping("/deleteProductFromCart")
     public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam UUID productId) {
         Product product = productService.getProductById(productId);
         cartService.deleteProductFromCart(userId, product);
-        return "Product removed from cart successfully";
+        return "Product deleted from cart";
     }
 
     @DeleteMapping("/delete/{userId}")
@@ -92,6 +92,6 @@ public class UserController {
             return "User not found";
         }
         userService.deleteUserById(userId);
-        return "User deleted successfully!";
+        return "User deleted successfully";
     }
 }
