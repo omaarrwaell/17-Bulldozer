@@ -30,9 +30,6 @@ public class UserController {
 
     @PostMapping("/")
     public User addUser(@RequestBody User user) {
-        if (userService.getUserById(user.getId()) != null) {
-            throw new IllegalArgumentException("User with ID " + user.getId() + " already exists");
-        }
         return userService.addUser(user);
     }
     @GetMapping("/")

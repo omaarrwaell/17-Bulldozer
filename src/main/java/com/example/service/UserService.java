@@ -29,6 +29,12 @@ public class UserService extends MainService<User> {
 
 
     public User addUser(User user) {
+
+        User existingUser = getUserById(user.getId());
+        if (existingUser != null) { // No exception now!
+            throw new IllegalArgumentException("User with ID " + user.getId() + " already exists");
+        }
+
         return userRepository.addUser(user);
     }
 
@@ -42,11 +48,7 @@ public class UserService extends MainService<User> {
         if (userId == null) {
             throw new IllegalArgumentException("User ID cannot be null");
         }
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-        return user;
+        return userRepository.getUserById(userId);
     }
 
 
