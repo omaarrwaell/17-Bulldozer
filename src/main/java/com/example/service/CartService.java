@@ -67,11 +67,11 @@ public class CartService extends MainService<Cart> {
         cartRepository.deleteProductFromCart(cartId, product);
     }
 
-    public void deleteProductFromCartByUserId(UUID userId, UUID productId) {
+    public String deleteProductFromCartByUserId(UUID userId, UUID productId) {
         if (userId == null || productId == null) {
             throw new IllegalArgumentException("User ID and Product ID cannot be null");
         }
-        cartRepository.deleteProductFromCartByUserId(userId, productId);
+      return  cartRepository.deleteProductFromCartByUserId(userId, productId);
     }
 
     public void deleteCartById(UUID cartId) {

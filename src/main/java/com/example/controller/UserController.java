@@ -79,8 +79,8 @@ public class UserController {
     @PutMapping("/deleteProductFromCart")
     public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam UUID productId) {
         Product product = productService.getProductById(productId);
-        cartService.deleteProductFromCart(userId, product);
-        return "Product deleted from cart";
+       return cartService.deleteProductFromCartByUserId(userId, productId);
+        //return "Product deleted from cart";
     }
 
     @DeleteMapping("/delete/{userId}")

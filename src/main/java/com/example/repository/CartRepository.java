@@ -124,7 +124,7 @@ public class CartRepository extends MainRepository<Cart> {
         }
     }
 
-    public void deleteProductFromCartByUserId(UUID userId, UUID productId) {
+    public String deleteProductFromCartByUserId(UUID userId, UUID productId) {
         if (userId == null || productId == null) {
             throw new IllegalArgumentException("User ID and Product ID cannot be null");
         }
@@ -135,9 +135,18 @@ public class CartRepository extends MainRepository<Cart> {
 
         if (cartOptional.isPresent()) {
             Cart cart = cartOptional.get();
+            if(cart.getProducts().isEmpty()) {
+                return "Cart is empty";
+            }
             cart.getProducts().removeIf(p -> p.getId().equals(productId));
+
             overrideData(carts);
+
+        } else if (!cartOptional.isPresent() ) {
+            return "Cart is empty";
+
         }
+        return "Product deleted from cart";
     }
 
     public void deleteCartById(UUID cartId) {
