@@ -58,18 +58,19 @@ public class UserRepository extends MainRepository<User> {
             updateUser(user);
 
         }
-    public void updateUser(User updatedUser) {
-        ArrayList<User> users = getUsers(); // Fetch latest users
 
-        // Replace existing user with the updated user
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId().equals(updatedUser.getId())) {
-                users.set(i, updatedUser);
-                overrideData(users); // Save updated list to JSON file
-                return;
+        public void updateUser(User updatedUser) {
+            ArrayList<User> users = getUsers(); // Fetch latest users
+
+            // Replace existing user with the updated user
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getId().equals(updatedUser.getId())) {
+                    users.set(i, updatedUser);
+                    overrideData(users); // Save updated list to JSON file
+                    return;
+                }
             }
         }
-    }
 
         public void removeOrderFromUser(UUID userId, UUID orderId) {
             ArrayList<User> users = getUsers();
