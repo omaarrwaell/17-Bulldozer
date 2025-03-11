@@ -20,6 +20,12 @@ public class OrderService extends MainService<Order> {
     }
 
     public void addOrder(Order order) {
+        if (order == null) {
+            throw new IllegalArgumentException("Order cannot be null");
+        }
+        if (orderRepository.getOrderById(order.getId()) != null) {
+            throw new IllegalArgumentException("Duplicate order with ID " + order.getId());
+        }
         orderRepository.addOrder(order);
     }
 
@@ -27,17 +33,26 @@ public class OrderService extends MainService<Order> {
         return orderRepository.getOrders();
     }
 
-    // 7.5.2.3 Get a Specific Order
     public Order getOrderById(UUID orderId) {
-        return orderRepository.getOrderById(orderId);
+        if (orderId == null) {
+            throw new IllegalArgumentException("Order ID cannot be null");
+        }
+        Order order = orderRepository.getOrderById(orderId);
+        if (order == null) {
+            throw new IllegalArgumentException("Order with ID " + orderId + " not found");
+        }
+        return order;
     }
 
     public void deleteOrderById(UUID orderId) {
-        if (orderRepository.getOrderById(orderId) != null) {
-            orderRepository.deleteOrderById(orderId);
-        } else {
-            throw new IllegalArgumentException("Order not found!");
+        if (orderId == null) {
+            throw new IllegalArgumentException("Order ID cannot be null");
         }
+        Order order = orderRepository.getOrderById(orderId);
+        if (order == null) {
+            throw new IllegalArgumentException("Order with ID " + orderId + " not found");
+        }
+        orderRepository.deleteOrderById(orderId);
     }
 
 

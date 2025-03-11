@@ -88,6 +88,9 @@ public class UserRepository extends MainRepository<User> {
 
 
         public void deleteUserById(UUID userId) {
+            if (getUserById(userId) == null) {
+                throw new IllegalArgumentException("User with ID " + userId + " not found");
+            }
             ArrayList<User> users = getUsers();
             users.removeIf(user -> user.getId().equals(userId));
 
