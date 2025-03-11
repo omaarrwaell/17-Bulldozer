@@ -2,9 +2,12 @@ package com.example.repository;
 
 import com.example.model.Cart;
 import com.example.model.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,10 +17,17 @@ import java.util.UUID;
 public class CartRepository extends MainRepository<Cart> {
 
     private static final String FILE_PATH = "src/main/java/com/example/data/carts.json";
+    @Autowired
+    private final ProductRepository productRepository;
 
+    public CartRepository(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+    @Value("${app.cart.data.path}")
+    private String cartDataPath;
     @Override
     protected String getDataPath() {
-        return FILE_PATH;
+        return cartDataPath;
     }
     @Override
     protected Class<Cart[]> getArrayType() {
@@ -80,6 +90,18 @@ public class CartRepository extends MainRepository<Cart> {
         ArrayList<Cart> carts = findAll();
         carts.removeIf(cart -> cart.getId().equals(cartId));
         overrideData(carts);
+    }
+    public void updateCart(Cart updatedCart) {
+        List<Cart> carts = getCarts(); // Fetch the latest carts from the JSON file
+
+        for (int i = 0; i < carts.size(); i++) {
+            if (carts.get(i).getUserId().equals(updatedCart.getUserId())) {
+                carts.set(i, updatedCart); // Update the user's cart
+                break;
+            }
+        }
+        overrideData(new ArrayList<>(carts));
+         // Save updated list back to the file
     }
 
 }

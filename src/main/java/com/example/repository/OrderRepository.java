@@ -1,6 +1,7 @@
 
 package com.example.repository;
 import com.example.repository.MainRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import com.example.model.Order;
 import com.example.model.User;
@@ -16,10 +17,12 @@ public class OrderRepository extends MainRepository<Order> {
     private static final String DATA_PATH = "src/main/java/com/example/data/orders.json";
     public OrderRepository() {
     }
+    @Value("${app.order.data.path}")
+    private String orderDataPath;
 
     @Override
     protected String getDataPath() {
-        return DATA_PATH;
+        return orderDataPath;
     }
     @Override
     protected Class<Order[]> getArrayType() {
