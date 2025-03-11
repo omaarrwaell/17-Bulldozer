@@ -72,7 +72,7 @@ public class UserController {
     @PutMapping("/addProductToCart")
     public String addProductToCart(@RequestParam UUID userId, @RequestParam UUID productId) {
         Product product = productService.getProductById(productId);
-        cartService.addProductToCart(userId, product);
+        cartService.addProductToCartByUserId(userId, productId);
         return "Product added to cart";
     }
 

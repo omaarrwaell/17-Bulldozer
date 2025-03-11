@@ -89,6 +89,11 @@ public class CartRepository extends MainRepository<Cart> {
             Cart cart = cartOptional.get();
             cart.getProducts().add(productOptional.get());
             overrideData(carts);
+        } else if (!cartOptional.isPresent()) {
+            Cart cart = new Cart();
+            cart.setUserId(userId);
+            cart.getProducts().add(productOptional.get());
+            save(cart);
         }
     }
 

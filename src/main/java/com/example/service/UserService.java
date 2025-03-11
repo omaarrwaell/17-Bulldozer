@@ -7,6 +7,7 @@ import com.example.model.Cart;
 import com.example.repository.CartRepository;
 import com.example.repository.UserRepository;
 import com.example.service.CartService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class UserService extends MainService<User> {
 
     private final UserRepository userRepository;
+    @Autowired
     private final CartService cartService;  // Injecting CartService
     private final CartRepository cartRepository;
     @Autowired
@@ -26,7 +28,10 @@ public class UserService extends MainService<User> {
         this.cartService = cartService;
         this.cartRepository = cartRepository;
     }
-
+    @PostConstruct
+    public void init() {
+        System.out.println("CartService initialized: " + (cartService != null));
+    }
 
     public User addUser(User user) {
 
@@ -51,7 +56,7 @@ public class UserService extends MainService<User> {
         }
         User user = userRepository.getUserById(userId);
         if (user == null) {
-            throw new IllegalArgumentException("User not found");
+//            throw new IllegalArgumentException("User not found");
         }
         return user;
     }
@@ -77,7 +82,7 @@ public class UserService extends MainService<User> {
         if (user == null) {
             throw new IllegalArgumentException("User not found");
         }
-        Cart cart = cartService.getCartByUserId(userId);
+        Cart cart = cartRepository.getCartByUserId(userId);
         if (cart == null || cart.getProducts().isEmpty()) {
             throw new IllegalStateException("Cart is empty or not found.");
         }
@@ -97,7 +102,7 @@ public class UserService extends MainService<User> {
             throw new IllegalArgumentException("User ID cannot be null");
         }
 
-        Cart cart = cartService.getCartByUserId(userId);
+        Cart cart = cartRepository.getCartByUserId(userId);
         if (cart == null) {
             throw new IllegalArgumentException("Cart not found for user");
         }
