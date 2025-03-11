@@ -23,6 +23,9 @@ public class ProductService extends MainService<Product> {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
+        if (productRepository.getProductById(product.getId()) != null) {
+            throw new IllegalArgumentException("Duplicate product with ID " + product.getId());
+        }
         return productRepository.addProduct(product);
     }
 
@@ -34,9 +37,12 @@ public class ProductService extends MainService<Product> {
         if (productId == null) {
             throw new IllegalArgumentException("Product ID cannot be null");
         }
-        return productRepository.getProductById(productId);
+        Product product = productRepository.getProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with ID " + productId + " not found");
+        }
+        return product;
     }
-
 
     public Product updateProduct(UUID productId, String newName, double newPrice) {
         if (productId == null || newName == null || newName.isEmpty() || newPrice < 0) {
@@ -44,7 +50,6 @@ public class ProductService extends MainService<Product> {
         }
         return productRepository.updateProduct(productId, newName, newPrice);
     }
-
 
     public void applyDiscount(double discount, ArrayList<UUID> productIds) {
         if (discount < 0 || discount > 100) {
@@ -59,6 +64,10 @@ public class ProductService extends MainService<Product> {
     public void deleteProductById(UUID productId) {
         if (productId == null) {
             throw new IllegalArgumentException("Product ID cannot be null");
+        }
+        Product product = productRepository.getProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with ID " + productId + " not found");
         }
         productRepository.deleteProductById(productId);
     }

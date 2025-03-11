@@ -39,16 +39,37 @@ public class UserService extends MainService<User> {
 
 
     public User getUserById(UUID userId) {
-        return userRepository.getUserById(userId);
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        User user = userRepository.getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        return user;
     }
 
 
     public List<Order> getOrdersByUserId(UUID userId) {
-        return userRepository.getOrdersByUserId(userId);
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        User user = userRepository.getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        return user.getOrders();
     }
 
 
     public void addOrderToUser(UUID userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        User user = userRepository.getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
         Cart cart = cartService.getCartByUserId(userId);
         if (cart == null || cart.getProducts().isEmpty()) {
             throw new IllegalStateException("Cart is empty or not found.");
@@ -59,21 +80,19 @@ public class UserService extends MainService<User> {
         }
 
         Order newOrder = new Order(UUID.randomUUID(), userId, totalPrice, cart.getProducts());
-
-
         userRepository.addOrderToUser(userId, newOrder);
-
-
-        emptyCart(userId);
+        emptyCart(userId);  // Ensure this method is called correctly
     }
 
 
     public void emptyCart(UUID userId) {
-        Cart cart = cartService.getCartByUserId(userId);
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
 
+        Cart cart = cartService.getCartByUserId(userId);
         if (cart == null) {
-            System.out.println("Cart not found for user: " + userId);
-            return;
+            throw new IllegalArgumentException("Cart not found for user");
         }
         System.out.println("Before emptying: " + cart.getProducts());
 
@@ -96,10 +115,35 @@ public class UserService extends MainService<User> {
 
 
     public void removeOrderFromUser(UUID userId, UUID orderId) {
-        userRepository.removeOrderFromUser(userId, orderId);
+        if (userId == null || orderId == null) {
+            throw new IllegalArgumentException("User ID and Order ID cannot be null");
+        }
+        User user = userRepository.getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        Order orderToRemove = null;
+        for (Order order : user.getOrders()) {
+            if (order.getId().equals(orderId)) {
+                orderToRemove = order;
+                break;
+            }
+        }
+        if (orderToRemove == null) {
+            throw new IllegalArgumentException("Order not found");
+        }
+        user.getOrders().remove(orderToRemove);
+        userRepository.updateUser(user);
     }
 
     public void deleteUserById(UUID userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        User user = userRepository.getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
         userRepository.deleteUserById(userId);
     }
 }
