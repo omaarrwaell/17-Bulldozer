@@ -6,7 +6,6 @@ import com.example.model.Order;
 import com.example.model.Cart;
 import com.example.repository.CartRepository;
 import com.example.repository.UserRepository;
-import com.example.service.*;
 import com.example.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import java.util.UUID;
 public class UserService extends MainService<User> {
 
     private final UserRepository userRepository;
-    private final CartService cartService;
+    private final CartService cartService;  // Injecting CartService
     private final CartRepository cartRepository;
     @Autowired
     public UserService(UserRepository userRepository, CartService cartService, CartRepository cartRepository) {
@@ -52,7 +51,7 @@ public class UserService extends MainService<User> {
         }
         User user = userRepository.getUserById(userId);
         if (user == null) {
-            throw new IllegalArgumentException("User not found");
+//            throw new IllegalArgumentException("User not found");
         }
         return user;
     }

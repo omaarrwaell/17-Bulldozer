@@ -3,6 +3,7 @@ package com.example.repository;
 import com.example.model.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -17,10 +18,11 @@ public class ProductRepository extends MainRepository<Product> {
     protected Class<Product[]> getArrayType() {
         return Product[].class;
     }
-
+    @Value("${app.product.data.path}")
+    private String productDataPath;
     @Override
     protected String getDataPath() {
-        return "src/main/java/com/example/data/products.json";
+        return productDataPath;
     }
 
     public Product addProduct(Product product) {

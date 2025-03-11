@@ -3,6 +3,7 @@ package com.example.repository;
 import com.example.model.Cart;
 import com.example.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -22,10 +23,11 @@ public class CartRepository extends MainRepository<Cart> {
     public CartRepository(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-
+    @Value("${app.cart.data.path}")
+    private String cartDataPath;
     @Override
     protected String getDataPath() {
-        return FILE_PATH;
+        return cartDataPath;
     }
     @Override
     protected Class<Cart[]> getArrayType() {
@@ -87,6 +89,11 @@ public class CartRepository extends MainRepository<Cart> {
             Cart cart = cartOptional.get();
             cart.getProducts().add(productOptional.get());
             overrideData(carts);
+        } else if (!cartOptional.isPresent()) {
+            Cart cart = new Cart();
+            cart.setUserId(userId);
+            cart.getProducts().add(productOptional.get());
+            save(cart);
         }
     }
 
@@ -122,7 +129,7 @@ public class CartRepository extends MainRepository<Cart> {
         }
     }
 
-    public void deleteProductFromCartByUserId(UUID userId, UUID productId) {
+    public String deleteProductFromCartByUserId(UUID userId, UUID productId) {
         if (userId == null || productId == null) {
             throw new IllegalArgumentException("User ID and Product ID cannot be null");
         }
@@ -133,9 +140,18 @@ public class CartRepository extends MainRepository<Cart> {
 
         if (cartOptional.isPresent()) {
             Cart cart = cartOptional.get();
+            if(cart.getProducts().isEmpty()) {
+                return "Cart is empty";
+            }
             cart.getProducts().removeIf(p -> p.getId().equals(productId));
+
             overrideData(carts);
+
+        } else if (!cartOptional.isPresent() ) {
+            return "Cart is empty";
+
         }
+        return "Product deleted from cart";
     }
 
     public void deleteCartById(UUID cartId) {

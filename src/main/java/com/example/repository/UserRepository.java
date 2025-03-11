@@ -3,6 +3,7 @@ package com.example.repository;
 import com.example.model.Order;
 import com.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,19 +14,20 @@ import java.util.UUID;
 @SuppressWarnings("rawtypes")
 public class UserRepository extends MainRepository<User> {
 
+    @Value("${app.user.data.path}")
+    private String userDataPath;
+
     @Override
     protected String getDataPath() {
-        return "src/main/java/com/example/data/users.json"; // Path to User data file
+        return userDataPath; // Path to User data file
     }
 
     @Override
     protected Class<User[]> getArrayType() {
         return User[].class; // JSON mapping type
     }
-
     @Autowired
     private OrderRepository orderRepository;
-
 
     public ArrayList<User> getUsers() {
             return findAll();
