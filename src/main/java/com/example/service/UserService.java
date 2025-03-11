@@ -101,16 +101,16 @@ public class UserService extends MainService<User> {
         if (cart == null) {
             throw new IllegalArgumentException("Cart not found for user");
         }
-        System.out.println("Before emptying: " + cart.getProducts());
+       // System.out.println("Before emptying: " + cart.getProducts());
 
         if (cart.getProducts() == null) {
             cart.setProducts(new ArrayList<>());
             System.out.println("Cart"); // Initialize if null
         } else {
-            cart.getProducts().clear();  // Clear instead of replacing
+            cart.setProducts(new ArrayList<>());  // Clear instead of replacing
         }
 
-        System.out.println("Cart products after emptying: " + cart.getProducts());
+      //  System.out.println("Cart products after emptying: " + cart.getProducts());
 
         // Ensure the updated cart is saved back
         cartRepository.updateCart(cart);

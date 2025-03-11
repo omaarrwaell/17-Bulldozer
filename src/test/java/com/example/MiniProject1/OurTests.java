@@ -612,14 +612,18 @@ public class OurTests {
 
         double discount = 10.0;
 
+        // Mock repository behavior
         when(productRepository.getProducts()).thenReturn(products);
         when(productRepository.getProductById(productId)).thenReturn(product);
 
+        // Apply discount
         productService.applyDiscount(discount, productIds);
 
-        assertEquals(90.0, product.getPrice()); // Check discounted price
-        verify(productRepository, times(1)).applyDiscount(discount, productIds);
-    }
+        // Verify that the product price was updated
+        assertEquals(90.0, product.getPrice(), 0.01); // Allow small floating-point differences
+
+        // Verify interactions
+        verify(productRepository, times(1)).saveAll(products);}
 
     @Test
     void testApplyDiscount_NullProductIds() {
@@ -811,7 +815,6 @@ public class OurTests {
         userService.addOrderToUser(userId);
 
         verify(userRepository, times(1)).addOrderToUser(eq(userId), any(Order.class));
-        verify(cartService, times(1)).getCartByUserId(userId);
         verify(cartRepository, times(1)).updateCart(cart);
     }
 

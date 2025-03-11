@@ -55,11 +55,25 @@ public class ProductService extends MainService<Product> {
         if (discount < 0 || discount > 100) {
             throw new IllegalArgumentException("Discount must be between 0 and 100");
         }
+
         if (productIds == null || productIds.isEmpty()) {
             throw new IllegalArgumentException("Product IDs cannot be null or empty");
         }
-        productRepository.applyDiscount(discount, productIds);
+
+        // Fetch all products
+        ArrayList<Product> products = productRepository.getProducts();
+
+        for (Product product : products) {
+            if (productIds.contains(product.getId())) {
+                double discountedPrice = product.getPrice() * (1 - discount / 100);
+                product.setPrice(discountedPrice); // Update in memory
+            }
+        }
+
+        // Save the updated products
+        productRepository.saveAll(products);
     }
+
 
     public void deleteProductById(UUID productId) {
         if (productId == null) {
